@@ -28,14 +28,9 @@
         z-index:10;
     }
 
-    h1{
-        color:#ff4f81;
-    }
+    h1{ color:#ff4f81; }
 
-    p{
-        color:#444;
-        line-height:1.5;
-    }
+    p{ color:#444; line-height:1.5; }
 
     button{
         padding:12px 24px;
@@ -46,16 +41,8 @@
         font-size:16px;
     }
 
-    .yes{
-        background:#4CAF50;
-        color:white;
-    }
-
-    .no{
-        background:#ff6b6b;
-        color:white;
-        position:relative;
-    }
+    .yes{ background:#4CAF50; color:white; }
+    .no{ background:#ff6b6b; color:white; position:relative; }
 
     #result{
         margin-top:20px;
@@ -64,7 +51,6 @@
         font-weight:bold;
     }
 
-    /* ❤️ cœurs flottants */
     .heart{
         position:absolute;
         color:rgba(255,255,255,0.7);
@@ -73,17 +59,9 @@
     }
 
     @keyframes floatUp{
-        0%{
-            transform:translateY(100vh) scale(0.5);
-            opacity:0;
-        }
-        50%{
-            opacity:1;
-        }
-        100%{
-            transform:translateY(-10vh) scale(1.2);
-            opacity:0;
-        }
+        0%{ transform:translateY(100vh); opacity:0; }
+        50%{ opacity:1; }
+        100%{ transform:translateY(-10vh); opacity:0; }
     }
 </style>
 </head>
@@ -91,12 +69,11 @@
 <body>
 
 <div class="card">
-    <h1>❤️ Veux-tu être ma cavalière ? ❤️</h1>
+    <h1>❤️ Veux-tu être ma cavalière pour la soirée Asobo d'été ? ❤️</h1>
 
     <p>
-        Chaque soirée devient plus belle quand elle est partagée avec la bonne personne.  
-        J’aimerais vivre celle-ci avec toi et créer de nouveaux souvenirs. 
-        Je te donne rendez vous le Jeudi 25 Juin 2026 à partir de 18h30 ! 
+        Chaque soirée devient plus belle quand elle est partagée avec la bonne personne.
+        J’aimerais beaucoup vivre celle-ci avec toi et créer ensemble de nouveaux souvenirs.
     </p>
 
     <button class="yes" onclick="acceptDate()">Oui 🥰</button>
@@ -105,16 +82,16 @@
     <div id="result"></div>
 </div>
 
-<!-- musique -->
-<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b1b1c6d2.mp3?filename=romantic-love-piano-ambient-110397.mp3" loop></audio>
+<audio id="music"
+src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b1b1c6d2.mp3?filename=romantic-love-piano-ambient-110397.mp3"
+loop></audio>
 
-<!-- confettis -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
+
 function acceptDate() {
 
-    // message
     document.getElementById("result").innerHTML =
         "🎉 Génial ! J’ai hâte de passer ce moment avec toi ! ❤️";
 
@@ -123,57 +100,67 @@ function acceptDate() {
     music.volume = 0.5;
     music.play();
 
-    // confettis (oui, ça explose littéralement)
-    confetti({
-        particleCount: 200,
-        spread: 120,
-        origin: { y: 0.6 }
-    });
+    // confettis
+    confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
 
-    // pluie de confettis bonus
-    let interval = setInterval(() => {
-        confetti({
-            particleCount: 80,
-            spread: 100,
-            origin: { x: Math.random(), y: Math.random() * 0.5 }
-        });
-    }, 400);
+    // cœurs
+    for(let i=0;i<20;i++) createHeart();
 
-    setTimeout(() => clearInterval(interval), 4000);
-
-    // cœurs supplémentaires
-    for(let i=0;i<20;i++){
-        createHeart();
-    }
+    // 📅 ajout calendrier Apple (ICS)
+    downloadCalendarEvent();
 }
 
-// bouton "Non" qui fuit (toujours aussi immature)
+// bouton "non" qui fuit
 const noBtn = document.getElementById("noBtn");
-
 noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * 300 - 150;
-    const y = Math.random() * 200 - 100;
+    const x = Math.random()*300 - 150;
+    const y = Math.random()*200 - 100;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// cœurs flottants permanents
+// cœurs
 function createHeart(){
     const heart = document.createElement("div");
     heart.classList.add("heart");
     heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.fontSize = (10 + Math.random() * 20) + "px";
-    heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+    heart.style.left = Math.random()*window.innerWidth + "px";
+    heart.style.fontSize = (10 + Math.random()*20) + "px";
+    heart.style.animationDuration = (3 + Math.random()*5) + "s";
 
     document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 7000);
+    setTimeout(() => heart.remove(), 7000);
 }
 
-// génération continue de cœurs
 setInterval(createHeart, 500);
+
+// 📅 génération fichier calendrier .ics
+function downloadCalendarEvent(){
+
+    const event = `
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20260625T183000
+DTEND:20260625T203000
+SUMMARY:Soirée Asobo avec mon cavalier
+DESCRIPTION:Amour, saucisson et bières
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const blob = new Blob([event], { type: "text/calendar" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Soiree_Asobo.ics";
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 </script>
 
 </body>
