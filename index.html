@@ -63,6 +63,19 @@
         50%{ opacity:1; }
         100%{ transform:translateY(-10vh); opacity:0; }
     }
+
+    /* bouton son discret */
+    #soundHint{
+        position:fixed;
+        bottom:10px;
+        right:10px;
+        background:rgba(255,255,255,0.7);
+        padding:8px 12px;
+        border-radius:10px;
+        font-size:12px;
+        cursor:pointer;
+        z-index:20;
+    }
 </style>
 </head>
 
@@ -82,31 +95,46 @@
     <div id="result"></div>
 </div>
 
-<audio id="music"
-src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b1b1c6d2.mp3?filename=romantic-love-piano-ambient-110397.mp3"
-loop></audio>
+<div id="soundHint" onclick="enableSound()">🔊 Activer la musique</div>
+
+<audio id="music" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b1b1c6d2.mp3?filename=romantic-love-piano-ambient-110397.mp3" type="audio/mp3">
+</audio>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
 
-function acceptDate() {
+let soundEnabled = false;
+
+function enableSound(){
+    const music = document.getElementById("music");
+    music.volume = 0.5;
+    music.play().then(() => {
+        soundEnabled = true;
+        document.getElementById("soundHint").innerText = "🔊 Musique activée ❤️";
+    }).catch(() => {
+        alert("Ton navigateur bloque encore la musique 😅");
+    });
+}
+
+function acceptDate(){
 
     document.getElementById("result").innerHTML =
         "🎉 Génial ! J’ai hâte de passer ce moment avec toi ! ❤️";
 
-    // musique
+    // musique (fiable maintenant)
     const music = document.getElementById("music");
     music.volume = 0.5;
-    music.play();
+    music.play().catch(()=>{});
 
     // confettis
     confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
 
     // cœurs
-    for(let i=0;i<20;i++) createHeart();
+    for(let i=0;i<25;i++) createHeart();
 
-    // 📅 ajout calendrier Apple (ICS)
+    // calendrier Apple (.ics)
     downloadCalendarEvent();
 }
 
@@ -118,7 +146,7 @@ noBtn.addEventListener("mouseover", () => {
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// cœurs
+// cœurs flottants
 function createHeart(){
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -128,27 +156,26 @@ function createHeart(){
     heart.style.animationDuration = (3 + Math.random()*5) + "s";
 
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 7000);
+    setTimeout(()=>heart.remove(),7000);
 }
 
 setInterval(createHeart, 500);
 
-// 📅 génération fichier calendrier .ics
+// 📅 calendrier Apple / iPhone / Google compatible
 function downloadCalendarEvent(){
 
-    const event = `
-BEGIN:VCALENDAR
+    const event =
+`BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 DTSTART:20260625T183000
-DTEND:20260625T203000
-SUMMARY:Soirée Asobo avec mon cavalier
-DESCRIPTION:Amour, saucisson et bières
+DTEND:20260625T213000
+SUMMARY:Soirée Asobo
+DESCRIPTION:Une soirée spéciale 💕
 END:VEVENT
-END:VCALENDAR
-`;
+END:VCALENDAR`;
 
-    const blob = new Blob([event], { type: "text/calendar" });
+    const blob = new Blob([event], { type:"text/calendar" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
