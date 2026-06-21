@@ -83,20 +83,20 @@
 <body>
 
 <div class="card">
-    <h1>🍻 L'Apéro des Copains ! 🍕</h1>
+    <h1>🍻 L'Auberge des Copains ! 🍕</h1>
 
-    <p>Il est grand temps de se retrouver pour trinquer et refaire le monde ! Tu es attendu(e) de toute urgence.</p>
+    <p>Il est grand temps de se retrouver pour trinquer et refaire le monde ! Tu es attendu(e) pour passer un bon moment tous ensemble.</p>
     
     <div class="details">
         <strong>📅 Quand :</strong> Samedi 27 juin à 19h00<br>
-        <strong>📍 Où :</strong> Auberge Bordelaise<br>
+        <strong>📍 Où :</strong> 12 chemin bel air 33130 Bègles<br>
         <strong>🎒 À ramener :</strong> Des chips, de la sangria (ou la boisson de ton choix) et un bon petit plat à partager !
     </div>
 
-    <p><strong>Est-ce que tu viens ?</strong></p>
+    <p><strong>Qu'est ce qu'on attend pour faire la fête ?</strong></p>
 
-    <button class="yes" onclick="acceptInvitation()">Grave ! 🎉</button>
-    <button class="no" id="noBtn">Je peux pas, j'ai poney 😅</button>
+    <button class="yes" onclick="acceptInvitation()">Let's go ! 🎉</button>
+    <button class="no" id="noBtn">Jamais avec vous 😅</button>
 
     <div id="result"></div>
 </div>
@@ -111,7 +111,8 @@
 <script>
 function acceptInvitation(){
     document.getElementById("result").innerHTML =
-        "🔥 Incroyable ! Prépare tes chips et ton meilleur plat, on va se régaler ! 🍷";
+        "🔥 Prépare tes chips et ton meilleur plat, on va se régaler ! 🍷/n Previens nous au 07 81 73 31 55";
+    
 
     // Lance les confettis
     confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
